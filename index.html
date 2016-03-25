@@ -1,150 +1,50 @@
 <?php
 
-    function env($envName, $default = false)
+#   Yii2.0.7学习笔记
+
+#   场景
+public function scenarios()
+{
+    return [
+        'create' => ['title', 'image', 'content'],
+        'update' => ['title', 'content'],
+    ];
+}
+
+#rule
+[['title', 'content'], 'required', 'on' => ['create', 'update']],
+[['image'], 'required', 'on' => 'create'],
+[['image'], 'image', 'enableClientValidation' => true,   'maxSize' => 1024, 'message' => '您上传的文件过
+大', 'on' => ['create']],
+
+#   controller  update
+$model = $this->findModel($id);
+$model->setScenario('update'); or $model->scenario = 'update';
+
+
+# widget小部件使用
+
+namespace backend\components;
+use backend\models\Nav;
+use yii\base\Widget;
+use yii\helpers\Html;
+
+class NavWidget extends Widget
+{
+    public function run()
     {
-        $envName = getenv($envName);
-
-        return $envName === false ? $default : $envName;
-    }
-
-    /**
-     * @param $message
-     * @param bool|true $debug
-     */
-    function pr($message, $debug = true)
-    {
-        echo '<pre>';
-        print_r($message);
-        echo '</pre>';
-        if ($debug) {
-            die;
+        $nav = Nav::find()
+        ->where(['status' => 1])
+        ->orderBy('sort ASC')
+        ->all();
+        foreach($nav as $_v){
+            $navs[] = $_v->id.'|'.$_v->nav_cn.'|'.$_v->nav_en;
         }
+        // 渲染视图
+         return $this->render('@app/views/site/_nav', [
+             'nav'=>$navs,
+         ]);
     }
-
-    /**
-     * @param $message
-     * @param bool|true $debug
-     */
-    function dd($message, $debug = true)
-    {
-        echo '<pre>';
-        var_dump($message);
-        echo '</pre>';
-        if ($debug) {
-            die;
-        }
-    }
-
-    /**
-     * 过滤python json
-     */
-    function jsonfilter($str){
-        if($str==''){
-            return '';
-        }
-
-        $pattern = '/u\'/';
-        $replacement = '\'';
-        $newstr = preg_replace($pattern, $replacement, $str);
-
-        $pattern = '/\'(\w+)\'/';
-        $replacement = '"$1"';
-        $newstr = preg_replace($pattern, $replacement, $newstr);
-
-
-        $pattern = '/\'/';
-        $replacement = '"';
-        $newstr = preg_replace($pattern, $replacement, $newstr);
-
-
-
-        return $newstr;
-    }
-
-    /** 兼容key没有双引括起来的JSON字符串解析
-     * @param String $str JSON字符串
-     * @param boolean $mod true:Array,false:Object
-     * @return Array/Object
-     */
-    function ext_json_decode($str, $mode=false){
-        if(preg_match('/\w:/', $str)){
-            $str = preg_replace('/(\w+):/is', '"$1":', $str);
-        }
-        //echo $str;
-        return json_decode($str, $mode);
-    }
-
-    /**
-     * 将对象成员变量或者数组的特殊字符进行转义
-     *
-     * @access   public
-     * @param    mix        $obj      对象或者数组
-     * @author   Xuan Yan
-     *
-     * @return   mix                  对象或者数组
-     */
-    function addslashes_deep_obj($obj)
-    {
-        if (is_object($obj) == true)
-        {
-            foreach ($obj AS $key => $val)
-            {
-                $obj->$key = addslashes_deep($val);
-            }
-        }
-        else
-        {
-            $obj = addslashes_deep($obj);
-        }
-
-        return $obj;
-    }
-
-    /**
-     * 递归方式的对变量中的特殊字符进行转义
-     *
-     * @access  public
-     * @param   mix     $value
-     *
-     * @return  mix
-     */
-    function addslashes_deep($value)
-    {
-        if (empty($value))
-        {
-            return $value;
-        }
-        else
-        {
-            return is_array($value) ? array_map('addslashes_deep', $value) : addslashes($value);
-        }
-    }
-
-    //第一个是原串,第二个是 部份串
-    function startWith($str, $needle) {
-
-        return strpos($str, $needle) === 0;
-
-    }
-
-    //第一个是原串,第二个是 部份串
-    function endWith($haystack, $needle) {
-
-        $length = strlen($needle);
-        if($length == 0)
-        {
-            return true;
-        }
-        return (substr($haystack, -$length) === $needle);
-    }
-
-    //保留二位小数
-    function baoliu_2($n){
-        return sprintf("%.2f",$n);
-    }
-    //保留一位小数
-    function baoliu_1($n){
-        return sprintf("%.1f",$n);
-    }
+}
 
 ?>

@@ -4341,7 +4341,7 @@ class Redis_Test extends TestSuite
         // Flush any loaded scripts
         $this->redis->script('flush');
 
-        // Non existant script (but proper sha1), and a random (not) sha1 string
+        // Non existent script (but proper sha1), and a random (not) sha1 string
         $this->assertFalse($this->redis->evalsha(sha1(uniqid())));
         $this->assertFalse($this->redis->evalsha('some-random-data'));
 

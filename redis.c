@@ -3849,7 +3849,7 @@ generic_scan_cmd(INTERNAL_FUNCTION_PARAMETERS, REDIS_SCAN_TYPE type) {
 
     // The iterator should be passed in as NULL for the first iteration, but we
     // can treat any NON LONG value as NULL for these purposes as we've 
-    // seperated the variable anyway.
+    // separated the variable anyway.
     if(Z_TYPE_P(z_iter) != IS_LONG || Z_LVAL_P(z_iter)<0) {
         /* Convert to long */
         convert_to_long(z_iter);

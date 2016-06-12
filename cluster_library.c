@@ -952,7 +952,7 @@ static int cluster_set_redirection(redisCluster* c, char *msg, int moved)
     if(!(host = strchr(msg, ' '))) return -1;
     *host++ = '\0';
 
-    // We need a : that seperates host from port
+    // We need a : that separates host from port
     if(!(port = strchr(host,':'))) return -1;
     *port++ = '\0';
 

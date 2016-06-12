@@ -577,7 +577,7 @@ _**Description**_: Return the current server time.
 (none)
 
 ##### *Return value*
-If successfull, the time will come back as an associative array with element zero being
+If successful, the time will come back as an associative array with element zero being
 the unix timestamp, and element one being microseconds.
 
 ##### *Examples*
